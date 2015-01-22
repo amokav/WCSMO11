@@ -1,4 +1,4 @@
-function F=CalcObj(nfilMOD1,nfilMOD2,viz)
+function [F, SDi]=CalcObj(nfilMOD1,nfilMOD2,viz)
 global ScriptDir
 
 
@@ -13,7 +13,8 @@ for i=1:nfilMOD1
 %     fprintf(Results_Data_MOD2_comb,F);
 %     fclose(Results_Data_MOD2_comb);
 filenameMOD1=[ScriptDir,'\..\CurrentRun\Results\Results_Data_MOD1_', num2str(i), '.txt'];
-f1(i)=ObjFcnDev1_1genperfil_auto(filenameMOD1,viz);
+[f1(i), SDi(i).MOD1]=ObjFcnDev1_1genperfil_auto(filenameMOD1,viz);
+
 end
 
 % filenameMOD1=[ScriptDir,'\..\CurrentRun\Results\Results_Data_MOD1_combine.txt'];
@@ -28,7 +29,7 @@ for i=1:nfilMOD2
 %     fprintf(Results_Data_MOD2_comb,F);
 %     fclose(Results_Data_MOD2_comb);
 filenameMOD2=[ScriptDir,'\..\CurrentRun\Results\Results_Data_MOD2_', num2str(i), '.txt'];
-f2(i)=ObjFcnDev2_1genperfil_auto(filenameMOD2,viz);
+[f2(i),SDi(i).MOD2]=ObjFcnDev2_1genperfil_auto(filenameMOD2,viz);
 end
 % filenameMOD2=[ScriptDir,'\..\CurrentRun\Results\Results_Data_MOD2_combine.txt'];
 % f2=ObjFcnDev2_auto(filenameMOD2);

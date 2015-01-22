@@ -36,7 +36,7 @@ viz=0;
 
 disp('Doing MOOP magic... please wait....')
 
-load([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','F_min','F_max')
+load([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','SimData','F_min','F_max')
 n_archive=size(init,2);
 P_init=init(n_archive).P_init;
 P_bar=archive(n_archive).P_bar;
@@ -48,7 +48,8 @@ F_Pbar_new=F_archive(n_archive).F_Pbar_new;
 
 P(1:length(P_init),:)=P_init;
 %F=CalcObj_plot(nfilMOD1,nfilMOD1,viz);
-F(1:length(P_init),:)=CalcObj(nfilMOD1,nfilMOD1,viz);
+[Finit, SDi]=CalcObj(nfilMOD1,nfilMOD1,viz);
+F(1:length(P_init),:)=Finit;
 
 if length(P_bar)~=0
     for i=length(P_init)+1:length(P_init)+length(P_bar)
@@ -216,9 +217,10 @@ F_archive(n_archive).F_Pbar_new=F_Pbar_new;
 F_total(n_archive).F=F;
 P_total(n_archive).P=P;
 number_of_ND(n_archive).nd_counter=nd_counter;
+SimData(n_archive).SDi=SDi; 
 % 
-% save([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','F_min','F_max')
-% DOE=DoE_maker_MOD_auto(P_init);
+ save([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','SimData','F_min','F_max')
+ DOE=DoE_maker_MOD_auto(P_init);
 
 
 exit

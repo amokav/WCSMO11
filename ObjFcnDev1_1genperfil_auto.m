@@ -1,4 +1,4 @@
-function f1=ObjFcnDev1_1genperfil_auto(filename,viz)
+function [f1, SDi]=ObjFcnDev1_1genperfil_auto(filename,viz)
 global ScriptDir
 expData2 = load([ScriptDir,'\..\ExperimentalData\exp1_res.mat']);
 ED1 = expData2.exp1_res;
