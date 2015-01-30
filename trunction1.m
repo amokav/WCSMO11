@@ -1,4 +1,4 @@
-function [Pbar_new, Fit_Pbar_new,F_Pbar_new]=trunction1(N,Pbar_new,distance,Fit_Pbar_new,F_Pbar_new,n_elimination)
+function [Pbar_new, Fit_Pbar_new,F_Pbar_new,SDi_new]=trunction1(N,Pbar_new,distance,Fit_Pbar_new,F_Pbar_new,SDi_new,n_elimination)
    for i=1:n_elimination 
     first=0;
     second=0;
@@ -41,6 +41,7 @@ function [Pbar_new, Fit_Pbar_new,F_Pbar_new]=trunction1(N,Pbar_new,distance,Fit_
     Pbar_new(eliminate,:)=[];
     Fit_Pbar_new(eliminate,:)=[];
     F_Pbar_new(eliminate,:)=[];
+    SDi_new(eliminate)=[];
    end
     
     

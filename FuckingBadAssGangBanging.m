@@ -36,7 +36,7 @@ viz=0;
 
 disp('Doing MOOP magic... please wait....')
 
-load([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','SimData','F_min','F_max')
+load([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','SimData','SimDataElite','F_min','F_max')
 n_archive=size(init,2);
 P_init=init(n_archive).P_init;
 P_bar=archive(n_archive).P_bar;
@@ -46,19 +46,20 @@ F_Pbar_new=F_archive(n_archive).F_Pbar_new;
 
 %% Creating Set P, by adding the two sets P_init (initial population) and
 
-P(1:length(P_init),:)=P_init;
+ P(1:length(P_init),:)=P_init;
 %F=CalcObj_plot(nfilMOD1,nfilMOD1,viz);
 [Finit, SDi]=CalcObj(nfilMOD1,nfilMOD1,viz);
-F(1:length(P_init),:)=Finit;
+ F(1:length(P_init),:)=Finit;
+%SimDataElite(n_archive).SDi=SDi;
+SimData(n_archive).SDi=SDi; 
 
 if length(P_bar)~=0
     for i=length(P_init)+1:length(P_init)+length(P_bar)
         P(i,:)=P_bar(i-length(P_init),:);
         F(i,:)=F_Pbar_new(i-length(P_init),:);
     end
-    
-end
-
+ end
+SDi(1,length(P_init)+1:length(P_init)+length(P_bar),:)=SimDataElite(n_archive).SDi;
 
 for i=1:length(P)
     %% Number of individuals that dominate this individual
@@ -154,6 +155,7 @@ for i=1:length(P)
         Pbar_new(nd_counter,:)=P(i,:);
         F_Pbar_new(nd_counter,:)=F(i,:);
         Fit_Pbar_new(nd_counter,:)=Fitness(i,:);
+        SDi_new(1,nd_counter)=SDi(1,i);
     end
 end
 %%% if the number of non-Dominated solutions is less than the archive
@@ -166,6 +168,7 @@ if nd_counter<N_bar
         Pbar_new(i+nd_counter,:)=P(indice_sortFitness(best_nominated(i)),:);
         F_Pbar_new(i+nd_counter,:)=F(indice_sortFitness(best_nominated(i)),:);
         Fit_Pbar_new(i+nd_counter,:)=Fitness(indice_sortFitness(best_nominated(i)),:);
+        SDi_new(1,i+nd_counter)=SDi(1,indice_sortFitness(best_nominated(i)));
     end
     %%% if the number of non-Dominated solutions is more than the archive
     %%% (P_bar)size (N_bar), the excessive non-dominated solutions will be deleted by means of truncation.
@@ -197,7 +200,7 @@ elseif nd_counter>N_bar
     %%%%% reducing the n_elimination number if excessive solutions from
     %%%%% P_bar by trunction
     n_elimination=nd_counter-N_bar;
-    [Pbar_new, Fit_Pbar_new, F_Pbar_new]=trunction1(N,Pbar_new,distance,Fit_Pbar_new,F_Pbar_new,n_elimination);
+    [Pbar_new, Fit_Pbar_new, F_Pbar_new,SDi_new]=trunction1(N,Pbar_new,distance,Fit_Pbar_new,F_Pbar_new,SDi_new,n_elimination);
 end
 %%%Applying Tournament Selection on Pbar_new to create mating pool
 pool_size=N_bar;
@@ -217,10 +220,11 @@ F_archive(n_archive).F_Pbar_new=F_Pbar_new;
 F_total(n_archive).F=F;
 P_total(n_archive).P=P;
 number_of_ND(n_archive).nd_counter=nd_counter;
-SimData(n_archive).SDi=SDi; 
+%SimData(n_archive).SDi=SDi(1:40); 
+SimDataElite(n_archive).SDi=SDi_new; 
 % 
- save([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','SimData','F_min','F_max')
- DOE=DoE_maker_MOD_auto(P_init);
-
-
+ save([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','SimData','SimDataElite','F_min','F_max')
+  DOE=DoE_maker_MOD_auto(P_init);
+% 
+% 
 exit
