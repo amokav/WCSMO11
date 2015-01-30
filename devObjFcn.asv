@@ -1,0 +1,74 @@
+clear all
+close all
+clc
+
+scriptPath = mfilename('fullpath');
+[Sdir,~,~] = fileparts(scriptPath);
+global ScriptDir 
+ScriptDir = Sdir;
+
+expData2 = load([ScriptDir,'\..\..\ExperimentalData\exp2_res.mat']);
+ED2 = expData2.exp2_res;
+
+load([ScriptDir,'\..\..\Results\archive.mat'])%,'archive','init','F_archive','F_total','P_total','number_of_ND','SimData','F_min','F_max')
+
+
+% gen=size(init,2);
+% nDoE=number_of_ND(gen).nd_counter;
+% nplot=ceil(sqrt(nDoE+1));
+% wexp=0.1;
+% 
+% 
+% for i= 1:nDoE
+%     x1=SimDataElite(gen).SDi(i).MOD2(:,1);
+%     y1=SimDataElite(gen).SDi(i).MOD2(:,2);
+% 
+%     err1(i) = obj_f2([x1,y1],ED2,0);
+% 
+% end
+% err1';
+
+%% New obj_f2
+ED = ED2;
+SD = [SimDataElite(123).SDi(38).MOD2(:,1),SimDataElite(123).SDi(38).MOD2(:,2)];
+mode = 2
+
+%Number of experimental points
+nEp = size(ED,1)
+
+%Number of simulation points
+nSp = size(SD,1)
+
+%% Interpolation Example
+% clear all; close all; clc;
+% x = [0 2 4];
+% y = [0 2 8];
+% plot(x,y,'sk-')
+% hold on
+% % x2 = [1 3]
+% x2 = linspace(min(x),max(x),100);
+% y2linear = interp1(x,y,x2);
+% % y2nearest = interp1(x,y,x2,'nearest')
+% y2spline = interp1(x,y,x2,'spline');
+% % plot(x2,y2nearest,'b*')
+% plot(x2,y2linear,'g.')
+% plot(x2,y2spline,'r.')
+% % legend('Data','Nearest','Linear','Spline')
+% legend('Data','Linear','Spline')
+
+%% Interpolate Experimental Data in Simulation points using linear and spline
+xE = ED(:,1);
+yE = ED(:,2);
+
+xS = SD(:,1);
+yS = SD(:,2);
+
+yE2linear = interp1(xE,yE,xS);
+
+plot(xE,yE,'r-'); hold on
+plot(xS,yE2linear,'bo-')
+plot(xS,yS,'k.-')
+legend('E-Data','Linear','Simulation')
+
+
+

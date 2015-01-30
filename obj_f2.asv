@@ -1,0 +1,47 @@
+function [err] =obj_f2(SD,ED,vE)
+% SD is simulation data
+% ED is experimental data
+
+xE = ED(:,1);
+yE = ED(:,2);
+
+xS = SD(:,1);
+yS = SD(:,2);
+[~,ia, ~]=unique(xS);
+
+xS = xS(ia);
+yS = yS(ia);
+
+% plot(xS,yS,'k-o')
+
+
+interp1(xS,yS,linspace(min(xS),max(xS),100))
+return
+
+yE2linear = interp1(xE,yE,xS);
+
+nd = length(xS);
+
+
+err = norm(yS-yE2linear)/nd;
+
+%% penalty factor
+% vE = 0.05
+% vS = max(SD(:,1));
+% gamma = 1;
+% vS
+% % vE
+% (vE/vS*10)^2
+% if vS < vE
+%     
+%     
+%     gamma = (1/(vE-vS))^2;
+% end
+% err=err*gamma;
+
+
+
+
+
+
+

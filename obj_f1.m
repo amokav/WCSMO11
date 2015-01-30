@@ -1,48 +1,42 @@
-function [err] =obj_f1(SD,ED,wexp,viz)
+function [err] =obj_f1(SD,ED,wE)
 % SD is simulation data
 % ED is experimental data
-% viz = 1 to visualize
-%wexp is the length of experimantal data
 
-if viz
-%     figure;
-%     plot(SD(:,1),SD(:,2),'b-o',ED(:,1),ED(:,2),'r-o')
-%     hold on
-end
+xE = ED(:,1);
+yE = ED(:,2);
 
-nExp = size(ED,1);
+[~,ia, ~]=unique(xE);
+xE = xE(ia);
+yE = yE(ia);
 
-nSD = size(SD,1);
-fExp = zeros(nSD,1);
-for i = 1:nSD
-    iS = SD(i,1);
-    dS = iS(ones(nExp,1),:);
-    D = dS-ED(:,1);
-    [~,mind] = min(abs(D));
-    fExp(i) = ED(mind,2);
-%     hold on;
-    
-    if viz
-%         iSD = [SD(i,1), SD(i,2)];
-%         iED = [ED(mind,1),ED(mind,2)];
-%         hp1 = plot(iED(1),iED(2),'*');
-%         hp2 = plot(iSD(1),iSD(2),'o','MarkerFaceColor','y');
-%         hp3 = plot([iED(1),iSD(1)],[iED(2),iSD(2)],'k-');
-    end
-end
+xS = SD(:,1);
+yS = SD(:,2);
+[~,ia, ~]=unique(xS);
 
-fSim = SD(:,2);
+xS = xS(ia);
+yS = yS(ia);
 
-ERR=abs(fExp-fSim);
-err = norm(ERR);
+
+ySreduced = interp1(xS,yS,linspace(min(xS),max(xS),2319));
+xSreduced = interp1(xS,xS,linspace(min(xS),max(xS),2319));
+
+yE2linear = interp1(xE,yE,xSreduced);
+yE2linear(isnan(yE2linear)) = 0;
+
+nd = length(xSreduced);
+err = norm(ySreduced-yE2linear)/nd;
+
+% plot(xSreduced, ySreduced,'b-o' ); hold on
+% plot(xSreduced, yE2linear,'r-o' )
+% legend('Sim','Exp')
 
 
 %% penalty factor
-wsim = max(SD(:,1));
-if wsim < wexp
-    gamma = ((wexp/wsim)*10)^2;
+wS = max(SD(:,1));
+if wS < wE
+    gamma = (wE/wS)^2;
 else
-    gamma = ((wsim/wexp)*10)^2;
+    gamma = (wS/wE)^2;
 end
 err=err*gamma;
 
