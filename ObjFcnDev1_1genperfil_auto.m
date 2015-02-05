@@ -11,7 +11,7 @@ wexp=0.1;
 % figure(1)
 ig = nG;
 SDi = [MOD1(ig).strain, MOD1(ig).stress];
-err(1) = obj_f1(SDi,ED1,wexp,0);
+err = obj_f1(SDi,ED1,wexp);
 if viz==1
     figure(1)
     

@@ -36,7 +36,7 @@ viz=0;
 
 disp('Doing MOOP magic... please wait....')
 
-load([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','SimData','SimDataElite','F_min','F_max')
+load([ScriptDir,'\..\Results\archive.mat'])
 n_archive=size(init,2);
 P_init=init(n_archive).P_init;
 P_bar=archive(n_archive).P_bar;
@@ -223,8 +223,8 @@ number_of_ND(n_archive).nd_counter=nd_counter;
 %SimData(n_archive).SDi=SDi(1:40); 
 SimDataElite(n_archive).SDi=SDi_new; 
 % 
- save([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','SimData','SimDataElite','F_min','F_max')
-  DOE=DoE_maker_MOD_auto(P_init);
-% 
-% 
-exit
+  save([ScriptDir,'\..\Results\archive.mat'],'archive','init','F_archive','F_total','P_total','number_of_ND','SimData','SimDataElite','F_min','F_max')
+    DOE=DoE_maker_MOD_auto(P_init);
+% % 
+% % 
+ exit

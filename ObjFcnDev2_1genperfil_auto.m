@@ -14,9 +14,9 @@ nplot=ceil(sqrt(nG+1));
 penalty=300;
 ig =nG;
 SDi = [MOD2(ig).strain, MOD2(ig).stress];
-err(1) = obj_f2(SDi,ED1,0);
+err = obj_f2(SDi,ED1,0.07);
 if ~isempty(MOD2(ig).abort)   %adds a penalty to objective if the abaqus was aborted becuase it exceded the max stress
-    err(1) = obj_f2(SDi,ED1,0)+penalty;
+    err(1) = obj_f2(SDi,ED1,0.07)+penalty;
 end
 if viz==1
     figure(2)
@@ -30,7 +30,7 @@ KD1 = load([ScriptDir,'\..\ExperimentalData\kent_mod2.mat']);
 KD1 = KD1.fem_enf_data;
 hp = plot(KD1(:,1),KD1(:,2),'-bo',ED1(:,1),ED1(:,2),'-ro');
 set(hp, 'MarkerSize', 2)
-errK = obj_f2(KD1,ED1,0);
+errK = obj_f2(KD1,ED1,0.07);
 title([errK])
 end
 f2=err';

@@ -14,9 +14,9 @@ nplot=ceil(sqrt(nG+1));
 penalty=300;
 for ig = 1:nG
     SDi = [MOD2(ig).strain, MOD2(ig).stress];
-    err(ig) = obj_f2(SDi,ED1,0);
+    err(ig) = obj_f2(SDi,ED1,0.07);
         if ~isempty(MOD2(ig).abort)   %adds a penalty to objective if the abaqus was aborted becuase it exceded the max stress
-        err(ig) = obj_f2(SDi,ED1,0)+penalty;  
+        err(ig) = obj_f2(SDi,ED1,0.07)+penalty;  
         end
     subplot(nplot,nplot,ig)
     hp = plot(SDi(:,1),SDi(:,2),'-bo',ED1(:,1),ED1(:,2),'-ro');
